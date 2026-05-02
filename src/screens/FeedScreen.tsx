@@ -1,25 +1,51 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { PhoneShellWithNav } from '../components/PhoneShell'
 import { BottomNav } from '../components/BottomNav'
 import { ServiceCard } from '../components/ServiceCard'
-import { services, currentUser } from '../data/mock'
+import { useServiceStore, useUserStore } from '../stores'
+import { currentUser as mockUser } from '../data/mock'
 
 const categories = ['Todo', 'Almuerzos', 'Mascotas', 'Hogar', 'Educación']
 
-export function FeedScreen() {
-  const [activeCategory, setActiveCategory] = useState('Todo')
+const categoryMap: Record<string, string[]> = {
+  Todo: [],
+  Almuerzos: ['food'],
+  Mascotas: ['pets'],
+  Hogar: ['home'],
+  Educación: ['education'],
+}
 
-  const towerServices = services.filter((s) => s.proximity === 'tower')
-  const conjuntoServices = services.filter((s) => s.proximity === 'near')
+export function FeedScreen() {
+  const storeUser = useUserStore((s) => s.user)
+  const user = storeUser ?? mockUser
+
+  const services = useServiceStore((s) => s.services)
+  const activeCategory = useServiceStore((s) => s.activeCategory)
+  const setActiveCategory = useServiceStore((s) => s.setActiveCategory)
+
+  const filtered = useMemo(() => {
+    if (activeCategory === 'Todo') return services
+    const cats = categoryMap[activeCategory] ?? []
+    return services.filter((s) => cats.includes(s.category))
+  }, [services, activeCategory])
+
+  const towerServices = useMemo(
+    () => filtered.filter((s) => s.proximity === 'tower'),
+    [filtered],
+  )
+  const conjuntoServices = useMemo(
+    () => filtered.filter((s) => s.proximity === 'near'),
+    [filtered],
+  )
 
   return (
     <PhoneShellWithNav bottomNav={<BottomNav activeKey="home" />}>
       <div className="feed-hero">
         <div className="feed-greeting">
-          Hola, <em>{currentUser.name.split(' ')[0]}</em>
+          Hola, <em>{user.name.split(' ')[0]}</em>
         </div>
         <div className="feed-meta">
-          {currentUser.conjunto} · {currentUser.tower}
+          {user.conjunto} · {user.tower}
         </div>
       </div>
       <div className="chips">
@@ -43,7 +69,7 @@ export function FeedScreen() {
         ))}
         <div className="section-label">
           <h4>En tu conjunto</h4>
-          <span>12 servicios</span>
+          <span>{conjuntoServices.length} servicios</span>
         </div>
         {conjuntoServices.map((service) => (
           <ServiceCard key={service.id} service={service} />

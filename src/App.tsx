@@ -1,14 +1,24 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './lib/theme'
 import { SingleView } from './components/SingleView'
 import { ShowcaseScreen } from './screens/ShowcaseScreen'
-import { OnboardingScreen } from './screens/OnboardingScreen'
 import { FeedScreen } from './screens/FeedScreen'
 import { ServiceDetailScreen } from './screens/ServiceDetailScreen'
 import { CreateScreen } from './screens/CreateScreen'
 import { BusinessScreen } from './screens/BusinessScreen'
 import { SocialScreen } from './screens/SocialScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
+import { LoginScreen } from './screens/LoginScreen'
+import { RegisterScreen } from './screens/RegisterScreen'
+import { MessagesScreen } from './screens/MessagesScreen'
+import { ChatScreen } from './screens/ChatScreen'
+import { useUserStore } from './stores'
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isLoggedIn = useUserStore((s) => s.isLoggedIn)
+  if (!isLoggedIn) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
 
 function App() {
   return (
@@ -16,19 +26,15 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ShowcaseScreen />} />
-          <Route
-            path="/onboarding"
-            element={
-              <SingleView>
-                <OnboardingScreen />
-              </SingleView>
-            }
-          />
+          <Route path="/login" element={<SingleView><LoginScreen /></SingleView>} />
+          <Route path="/registro" element={<SingleView><RegisterScreen /></SingleView>} />
           <Route
             path="/feed"
             element={
               <SingleView>
-                <FeedScreen />
+                <ProtectedRoute>
+                  <FeedScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />
@@ -36,7 +42,9 @@ function App() {
             path="/servicio/:id"
             element={
               <SingleView>
-                <ServiceDetailScreen />
+                <ProtectedRoute>
+                  <ServiceDetailScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />
@@ -44,7 +52,9 @@ function App() {
             path="/publicar"
             element={
               <SingleView>
-                <CreateScreen />
+                <ProtectedRoute>
+                  <CreateScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />
@@ -52,7 +62,9 @@ function App() {
             path="/comercio"
             element={
               <SingleView>
-                <BusinessScreen />
+                <ProtectedRoute>
+                  <BusinessScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />
@@ -60,7 +72,9 @@ function App() {
             path="/social"
             element={
               <SingleView>
-                <SocialScreen />
+                <ProtectedRoute>
+                  <SocialScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />
@@ -68,7 +82,29 @@ function App() {
             path="/perfil"
             element={
               <SingleView>
-                <ProfileScreen />
+                <ProtectedRoute>
+                  <ProfileScreen />
+                </ProtectedRoute>
+              </SingleView>
+            }
+          />
+          <Route
+            path="/mensajes"
+            element={
+              <SingleView>
+                <ProtectedRoute>
+                  <MessagesScreen />
+                </ProtectedRoute>
+              </SingleView>
+            }
+          />
+          <Route
+            path="/chat/:id"
+            element={
+              <SingleView>
+                <ProtectedRoute>
+                  <ChatScreen />
+                </ProtectedRoute>
               </SingleView>
             }
           />

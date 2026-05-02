@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { PhoneShell } from '../components/PhoneShell'
 import { services } from '../data/mock'
+import { IconBack, IconHeart, IconChat } from '../components/icons'
 
 export function ServiceDetailScreen() {
   const navigate = useNavigate()
@@ -12,14 +13,10 @@ export function ServiceDetailScreen() {
       <div style={{ position: 'relative' }}>
         <div className="detail-hero">
           <button className="back-btn" onClick={() => navigate(-1)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            <IconBack />
           </button>
           <button className="fav-btn">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 21s-7-4.5-9.5-9.5S5 4 8 4s4 2 4 2 1-2 4-2 5.5 2.5 5.5 7.5S12 21 12 21z" />
-            </svg>
+            <IconHeart />
           </button>
           <div className="detail-mono">{service.initial}</div>
         </div>
@@ -61,9 +58,7 @@ export function ServiceDetailScreen() {
         </div>
         <div className="detail-cta-bar">
           <button className="icon-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-            </svg>
+            <IconChat />
           </button>
           <button className="cta-btn">Pedir ahora</button>
         </div>

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ReactNode } from 'react'
 import { ThemeToggle } from './ThemeToggle'
+import { IconBack } from './icons'
 
 interface SingleViewProps {
   children: ReactNode
@@ -11,9 +12,7 @@ export function SingleView({ children }: SingleViewProps) {
     <div className="single-view">
       <div className="single-view-back">
         <Link to="/">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
+          <IconBack />
           Volver al showcase
         </Link>
         <ThemeToggle />

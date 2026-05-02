@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type { Service } from '../data/mock'
+import { IconStar } from '../components/icons'
 
 interface ServiceCardProps {
   service: Service
@@ -22,9 +23,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
             {service.proximityLabel}
           </span>
           <span className="service-rating">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z" />
-            </svg>
+            <IconStar />
             {service.rating}
           </span>
           <span className="service-price">{service.price}</span>

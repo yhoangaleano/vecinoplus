@@ -1,8 +1,20 @@
 import { useNavigate } from 'react-router-dom'
 import { PhoneShell } from '../components/PhoneShell'
+import { IconChevronRight, IconArrowRight } from '../components/icons'
+import { useUserStore } from '../stores'
+import { currentUser } from '../data/mock'
 
 export function OnboardingScreen() {
   const navigate = useNavigate()
+  const login = useUserStore((s) => s.login)
+  const completeOnboarding = useUserStore((s) => s.completeOnboarding)
+
+  const handleContinue = () => {
+    login(currentUser)
+    completeOnboarding()
+    navigate('/feed')
+  }
+
   return (
     <PhoneShell>
       <div className="onb-wrap">
@@ -23,9 +35,7 @@ export function OnboardingScreen() {
             <div className="field-label">Conjunto</div>
             <div className="field">
               Reservas de Sabaneta
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
+              <IconChevronRight />
             </div>
           </div>
           <div className="field-row">
@@ -39,11 +49,9 @@ export function OnboardingScreen() {
             </div>
           </div>
         </div>
-        <button className="cta-btn" style={{ marginTop: 'auto' }} onClick={() => navigate('/feed')}>
+        <button className="cta-btn" style={{ marginTop: 'auto' }} onClick={handleContinue}>
           Continuar verificación
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M5 12h14M13 5l7 7-7 7" />
-          </svg>
+          <IconArrowRight />
         </button>
         <p className="onb-trust">
           Te enviaremos un código a tu administración
